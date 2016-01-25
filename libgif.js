@@ -27,6 +27,7 @@
 		loop_mode			Optional. Setting this to false will force disable looping of the gif.
 		auto_play 			Optional. Same as the rel:auto_play attribute above, this arg overrides the img tag info.
 		max_width			Optional. Scale images over max_width down to max_width. Helpful with mobile.
+		width				Optional. Scale images to width.
  		on_end				Optional. Add a callback for when the gif reaches the end of a single loop (one iteration). The first argument passed will be the gif HTMLElement.
 		loop_delay			Optional. The amount of time to pause (in ms) after each single loop (iteration).
 		draw_while_loading	Optional. Determines whether the gif will be drawn to the canvas whilst it is loaded.
@@ -878,12 +879,18 @@
         };
 
         var get_canvas_scale = function() {
-            var scale;
-            if (options.max_width && hdr && hdr.width > options.max_width) {
-                scale = options.max_width / hdr.width;
-            }
-            else {
-                scale = 1;
+            var scale = 1;
+            var width;
+
+            if (hdr && (options.width || options.max_width)) {
+                width = hdr.width;
+                if (options.width) {
+                    width = options.width;
+                }
+                if (options.max_width && width > options.max_width) {
+                    width = options.max_width;
+                }
+                scale = width / hdr.width;
             }
             return scale;
         }
